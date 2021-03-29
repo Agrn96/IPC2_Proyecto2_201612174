@@ -1,13 +1,12 @@
-from Reportes import Node_Repo
 from Lista_Orthogonal import Lista_Orthogonal
 import xml.etree.ElementTree as ET
+from tkinter import *
+from tkinter import filedialog
 
 def cargar_Archivo(repo):
-    #print("Ingrese la ruta del archivo:", end=" ");
-    #ruta = input();             # ruta = "D:\Documents\Projects\IPC2_Proyecto1_201612174\Ejemplo1.xml"
-    ruta = "Ejemplo1.xml"
+    filename = filedialog.askopenfile(filetypes=(('text files', 'xml'),))
     lista = Lista_Orthogonal()  # Nueva Lista para guardar los datos en memoria 
-    tree = ET.parse(ruta)       
+    tree = ET.parse(filename)       
     root = tree.getroot()        
     temp = lista
     repo_ = repo
@@ -39,17 +38,10 @@ def cargar_Archivo(repo):
             j+=1
         repo_.add(root[k][0].text,"Espacios Llenos: " + str(lleno) + " Espacios Vacios: " + str(vacio))
         k+=1
-        newRepo = Node_Repo()
-        repo_.next = newRepo
-        repo_ = repo_.next
         newLista = Lista_Orthogonal()
         temp.next = newLista
         temp = temp.next
-    
-    #temp = lista
-    #while(temp.next != None):
-    #    temp.out()
-    #    temp = temp.next
-    return lista, repo
+    filename.close()
+    return lista
 
 
