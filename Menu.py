@@ -1,10 +1,16 @@
+from Reportes import Node_Repo
 from tkinter import *
 from tkinter import ttk
+from typing import Collection
 from Lista_Orthogonal import Lista_Orthogonal
 from Cargar_Archivo import cargar_Archivo
+import webbrowser
+from Generar_HTML import generar_HTML
 
 lista = Lista_Orthogonal()
 lista_ = Lista_Orthogonal()
+repo = Node_Repo()
+repo_ = repo
 
 ventana = Tk()
 ventana.title('Principal')
@@ -16,11 +22,13 @@ pes0 = ttk.Frame(notebook)
 pes1 = ttk.Frame(notebook)
 pes2 = ttk.Frame(notebook)
 pes3 = ttk.Frame(notebook)
+pes4 = ttk.Frame(notebook)
 
 notebook.add(pes0, text=f'{"Cargar Archivo": ^40s}')
 notebook.add(pes1, text=f'{"Operaciones (Una Imagen)": ^40s}')
 notebook.add(pes2, text=f'{"Operaciones (Dos Imagenes)": ^40s}')
 notebook.add(pes3, text=f'{"Reportes": ^40s}')
+notebook.add(pes4, text=f'{"Ayuda": ^40s}')
 
 # pes0 -> Cargar Archivo
 
@@ -33,11 +41,21 @@ frame1.grid(columnspan=3)
 frame2 = Canvas(pes2, width=900, height=600)    #pes2
 frame2.grid(columnspan=4)
 
+frame3 = Canvas(pes3, width=900, height=600)    #pes2
+frame3.grid(columnspan=1)
+
+frame4 = Canvas(pes4, width=900, height=600)    #pes2
+frame4.grid(columnspan=1)
+
 text1 = Label(frame1, text="List of Matrix")    #pes1
 text1.grid(column=0,row = 0, rowspan=20)
 
 text1_ = Label(frame2, text="List of Matrix")    #pes2
 text1_.grid(column=0,row = 0, rowspan=20)
+def latest_Repo(repo_):
+    while(repo_.next != None):
+        repo_ = repo_.next
+    return repo_
 
 def updateList(temp):
     storage = ""
@@ -49,7 +67,14 @@ def updateList(temp):
     text1['text'] = storage
     text1_['text'] = storage
 
-boton = Button(pes0, text="Cargar Archivo", command=lambda: (temp0 := cargar_Archivo(), temp1 := cargar_Archivo(), lista.setList(temp0.head, temp0.next), lista_.setList(temp1.head, temp1.next), updateList(temp0), ventana.update()))
+def botonCall():
+    temp0, repo_T = cargar_Archivo(repo_)
+    repo_.setRepo(repo_T.dt, repo_T.type, repo_T.desc, repo_T.next)
+    lista.setList(temp0.head, temp0.next, temp0.x, temp0.y)
+    updateList(temp0)
+    ventana.update()
+
+boton = Button(pes0, text="Cargar Archivo", command=lambda: botonCall())
 boton.pack()
 
 # pes1 -> Operaciones sobre un imagen
@@ -128,7 +153,7 @@ text2_.grid(column=1, row=2)
 text3_ = Label(frame2, text="Placeholder", bg="gray40")
 text3_.grid(column=2, row=2)
 
-text4_ = Label(frame2, text="Placeholder", bg="gray40")
+text4_ = Label(frame2, text="Placeholder", bg="black", fg="white")
 text4_.grid(column=3, row=2)
 
 input1_ = Entry(frame2)
@@ -146,43 +171,30 @@ boton3_.grid(column=2, row=4)
 def union(lista1, lista2):
     temp = lista1.head.prev
     temp_ = lista2.head.prev
-    newList = Lista_Orthogonal()
-    newx = ""
-    newy = ""
-    if(int(lista1.x) > int(lista2.x)):
-        newx = lista2.x 
-    else:
-        newx = lista1.x
-    if(int(lista1.y) > int(lista2.y)):
-        newy = lista2.y  
-    else: 
-        newy = lista1.y
-    
-    newList.add_headers("Result", int(newx), int(newy))
-    while(temp.prev != None and temp_.prev != None):
+
+    while(temp != None and temp_ != None):
         row = temp.nodeAccess
         row_ = temp_.nodeAccess
 
-        while(row.right != None and row_.right != None):
+        while(row != None and row_ != None):
             if(row.data == "*" or row_.data == "*"):
-                newList.add_nodes(row.x, row.y, "*")
+                row.data = "*"
             else:
-                newList.add_nodes(row.x, row.y, "-")
+                row.data = "-"
             row = row.right
             row_ = row_.right
         temp = temp.prev
-        temp_ = temp.prev
-    return newList
+        temp_ = temp_.prev
 
 def interseccion(lista1, lista2):
     temp = lista1.head.prev
     temp_ = lista2.head.prev
 
-    while(temp.prev != None and temp_.prev != None):
+    while(temp != None and temp_ != None):
         row = temp.nodeAccess
         row_ = temp_.nodeAccess
 
-        while(row.right != None and row_.right != None):
+        while(row != None and row_ != None):
             if(row.data == "*" and row_.data == "*"):
                 row.data = "*"
             else:
@@ -190,22 +202,71 @@ def interseccion(lista1, lista2):
             row = row.right
             row_ = row_.right
         temp = temp.prev
-        temp_ = temp.prev
+        temp_ = temp_.prev
 
-boton4_ = Button(frame2, text="Union", command = lambda: (temp := traverse(lista, input1_.get()), temp_ := traverse(lista, input2_.get()), result := union(temp, temp_) ,storage := result.getList(), showList3(storage), ventana.update()))
+def diferencia(lista1, lista2):
+    temp = lista1.head.prev
+    temp_ = lista2.head.prev
+    while(temp != None and temp_ != None):
+        row = temp.nodeAccess
+        row_ = temp_.nodeAccess
+        while(row != None and row_ != None):
+            if(row_.data == "*"):
+                row.data = "-"
+            row = row.right
+            row_ = row_.right
+        temp = temp.prev
+        temp_ = temp_.prev
+
+def diferencia_S(lista1, lista2):
+    temp = lista1.head.prev
+    temp_ = lista2.head.prev
+    while(temp != None and temp_ != None):
+        row = temp.nodeAccess
+        row_ = temp_.nodeAccess
+        while(row != None and row_ != None):
+            if(row_.data == "*" and row.data == "-"):
+                row.data = "*"
+            elif(row_.data == "-" and row.data == "*"):
+                row.data = "*"
+            else:
+                row.data = "-"
+            row = row.right
+            row_ = row_.right
+        temp = temp.prev
+        temp_ = temp_.prev
+
+boton4_ = Button(frame2, text="Union", command = lambda: (temp := traverse(lista, input1_.get()), temp_ := traverse(lista, input2_.get()), union(temp, temp_) ,storage := temp.getList(), showList3(storage), ventana.update()))
 boton4_.grid(column=2, row=5)
 
-boton5_ = Button(frame2, text="Interseccion", command = lambda: (temp := traverse(lista, input2_.get()), temp.rot_V() ,storage := temp.getList(), showList2(storage), ventana.update()))
+boton5_ = Button(frame2, text="Interseccion", command = lambda: (temp := traverse(lista, input1_.get()), temp_ := traverse(lista, input2_.get()), interseccion(temp, temp_), storage := temp.getList(), showList3(storage), ventana.update()))
 boton5_.grid(column=2, row=6)
 
-boton6_ = Button(frame2, text="Diferencia", command = lambda: (temp := traverse(lista, input2_.get()), temp.rot_V() ,storage := temp.getList(), showList2(storage), ventana.update()))
-boton6_.grid(column=2, row=6)
+boton6_ = Button(frame2, text="Diferencia", command = lambda: (temp := traverse(lista, input1_.get()), temp_ := traverse(lista, input2_.get()), diferencia(temp, temp_) ,storage := temp.getList(), showList3(storage), ventana.update()))
+boton6_.grid(column=2, row=7)
 
-boton7_ = Button(frame2, text="Diferencia Simetrica", command = lambda: (temp := traverse(lista, input2_.get()), temp.rot_V() ,storage := temp.getList(), showList2(storage), ventana.update()))
-boton7_.grid(column=2, row=6)
+boton7_ = Button(frame2, text="Diferencia Simetrica", command = lambda: (temp := traverse(lista, input1_.get()), temp_ := traverse(lista, input2_.get()), diferencia_S(temp, temp_) ,storage := temp.getList(), showList3(storage), ventana.update()))
+boton7_.grid(column=2, row=8)
 
 # pes3 -> Reportes
 
+boton8_ = Button(frame3,text = "Abrir Reporte", command = lambda: generar_HTML(repo))
+boton8_.grid(column=0, row = 1)
+
+# pes4 -> Ayuda
+def abrir_Ensayo():
+    webbrowser.open_new("D:\Downloads\[IPC2]Proyecto_2.pdf")
+
+boton9_ = Button(frame4, text = "Documentacion" ,command = lambda: abrir_Ensayo())
+boton9_.grid(column=0, row=2)
+
+def mostrar_Datos():
+    boton10_.visible = False
+    text5_ = Label(frame4, text="Alberto Gabriel Reyes Ning\n201612174\nIPC2 B")
+    text5_.grid(column=0, row=1)
+
+boton10_ = Button(frame4, text = "Datos del Estudiante" ,command = lambda: mostrar_Datos())
+boton10_.grid(column=0, row=1)
 
 ventana.geometry("900x600")
 ventana.mainloop()

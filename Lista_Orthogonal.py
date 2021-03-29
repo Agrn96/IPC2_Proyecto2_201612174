@@ -92,9 +92,11 @@ class Lista_Orthogonal:
             print("")
             temp = temp.prev        
     
-    def setList(self, head, next):
+    def setList(self, head, next, x, y):
         self.head = head
         self.next = next
+        self.x = x
+        self.y = y
 
     def getList(self):
         storage = ""
@@ -103,7 +105,7 @@ class Lista_Orthogonal:
             temp_ = temp.nodeAccess
             while(temp_ != None):
                 if(temp_.data == "-"):
-                    storage += " \t"
+                    storage += "|\t"
                 else:
                     storage += "*\t"
                 temp_ = temp_.right
