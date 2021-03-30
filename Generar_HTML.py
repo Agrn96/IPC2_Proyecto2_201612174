@@ -1,7 +1,7 @@
 import webbrowser
 from datetime import datetime
 def generar_HTML(repo):
-    name = "Reporte"
+    name = ".\Documentacion\Reporte"
     with open(name + ".html", "w") as f:
         f.write("<!DOCTYPE html>\n<html>\n<body>\n")
         f.write("\n<div><H1 style=\"align=center\">Reportes</H1></div>\n")
@@ -19,4 +19,4 @@ def generar_HTML(repo):
             temp = temp.next
         f.write("</tbody></table></div>")
         f.write("\n</body>\n</html>")
-        webbrowser.open("Reporte.html")
+        webbrowser.open(".\Documentacion\Reporte.html")

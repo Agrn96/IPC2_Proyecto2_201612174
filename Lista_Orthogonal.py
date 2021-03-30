@@ -95,7 +95,7 @@ class Lista_Orthogonal:
             temp_ = temp.nodeAccess
             while(temp_ != None):
                 if(temp_.data == "-"):
-                    storage += "|\t"
+                    storage += " \t"
                 else:
                     storage += "*\t"
                 temp_ = temp_.right

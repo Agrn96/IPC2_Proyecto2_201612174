@@ -302,12 +302,11 @@ boton7_ = Button(frame2, text="Diferencia Simetrica", command = lambda: (boton_O
 boton7_.grid(column=2, row=8)
 
 # pes3 -> Reportes
-
 boton8_ = Button(frame3,text = "Abrir Reporte", command = lambda: (generar_HTML(repo)))
 boton8_.grid(column=0, row = 1)
 
 # pes4 -> Ayuda
-boton9_ = Button(frame4, text = "Documentacion" ,command = lambda: (webbrowser.open_new("D:\Downloads\[IPC2]Proyecto_2.pdf")))
+boton9_ = Button(frame4, text = "Documentacion" ,command = lambda: (webbrowser.open_new("D:/Documents/Projects/IPC2_Proyecto2_201612174/Documentacion/201612174_ArticuloEnsayo_IPC2.pdf")))
 boton9_.grid(column=0, row=2)
 
 def mostrar_Datos():

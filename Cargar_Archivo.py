@@ -28,7 +28,8 @@ def cargar_Archivo(repo):
                 i+=1
                 j=0
                 continue
-            elif(int(j)>int(temp.y) or int(i)>int(temp.x)):
+            elif(int(j)>=int(temp.y) or int(i)>=int(temp.x)):
+                repo.add("ERROR","Datos fuera del rango del matriz")
                 continue
             temp.add_nodes(i,j,line)
             if(line == "-"):
