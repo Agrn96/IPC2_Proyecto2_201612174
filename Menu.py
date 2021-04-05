@@ -1,3 +1,6 @@
+from Generate_Table import generar
+import PIL.Image
+import PIL.ImageTk
 from Reportes import List_Repo
 from tkinter import *
 from tkinter import ttk
@@ -76,16 +79,41 @@ text2.grid(column=1, row=2)
 text3 = Label(frame1, text="Placeholder", bg="gray40")
 text3.grid(column=2, row=2)
 
-def showList1(storage):
-    text2['text'] = storage
-    text2_['text'] = storage
+def showList1():
+    image = PIL.Image.open("Image1.dot.png")
+    image = image.resize((400,400))
+    photo = PIL.ImageTk.PhotoImage(image)
 
-def showList2(storage):
-    text3['text'] = storage
-    text3_['text'] = storage
+    text2 = Label(frame1, image= photo)
+    text2.image = photo
+    text2.grid(column=1, row=2)
 
-def showList3(storage):
-    text4_['text'] = storage
+    text2_ = Label(frame2, image= photo)
+    text2_.image = photo
+    text2_.grid(column=1, row=2)
+
+def showList2():
+    image = PIL.Image.open("Image2.dot.png")
+    image = image.resize((400,400))
+    photo = PIL.ImageTk.PhotoImage(image)
+    
+    text3 = Label(frame1, image= photo)
+    text3.image = photo
+    text3.grid(column=2, row=2)
+
+    text3_ = Label(frame2, image= photo)
+    text3_.image = photo
+    text3_.grid(column=2, row=2)
+
+def showList3():
+    image = PIL.Image.open("Image3.dot.png")
+    image = image.resize((400,400))
+    photo = PIL.ImageTk.PhotoImage(image)
+    
+    text4_ = Label(frame2, image= photo)
+    text4_.image = photo
+    text4_.grid(column=3, row=2)
+
 input1 = Entry(frame1)
 input1.grid(column=1, row=3)
 
@@ -97,7 +125,6 @@ def traverse(lista, x):
             temp = temp.next
             i+=1
     except:
-        print("ERROR: Valor invalido")
         repo.add("ERROR","Valor afuera de rango")
         return lista
     return temp
@@ -120,14 +147,13 @@ def boton_Op(num):
         elif(num==7):
             hold = input5.get().split(',')
             temp.agregar_R(hold[0],hold[1],hold[2], hold[3], repo)
-        storage = temp.getList()
-        showList2(storage)
+        generar(temp,"Image2.dot","#F08080")
+        showList2()
         ventana.update()
     except:
-        print("Error con la llamada al funcion")
         repo.add("ERROR","Error con la llamada al funcion")
 
-boton2 = Button(frame1, text="Mostrar Lista", command=lambda: (temp := traverse(lista, input1.get()), storage := temp.getList(), showList1(storage), ventana.update()))
+boton2 = Button(frame1, text="Mostrar Lista", command=lambda: (temp := traverse(lista, input1.get()), generar(temp, "Image1.dot", "gray80"), showList1(), ventana.update()))
 boton2.grid(column=1, row=4)
 #newRepo = Node_Repo(), newRepo.add("Rotacion Horizontal", temp.head.id)
 boton3 = Button(frame1, text="Rotacion Horizontal", command = lambda: (boton_Op(1)))
@@ -180,10 +206,10 @@ input1_.grid(column=1, row=3)
 input2_ = Entry(frame2)
 input2_.grid(column=2, row=3)
 
-boton2_ = Button(frame2, text="Mostrar Lista 1", command=lambda: (temp := traverse(lista, input1_.get()), storage := temp.getList(), showList1(storage), ventana.update()))
+boton2_ = Button(frame2, text="Mostrar Lista 1", command=lambda: (temp := traverse(lista, input1_.get()), generar(temp, "Image1.dot","gray80"), showList1(), ventana.update()))
 boton2_.grid(column=1, row=4)
 
-boton3_ = Button(frame2, text="Mostrar Lista 2", command=lambda: (temp := traverse(lista, input2_.get()), storage := temp.getList(), showList2(storage), ventana.update()))
+boton3_ = Button(frame2, text="Mostrar Lista 2", command=lambda: (temp := traverse(lista, input2_.get()), generar(temp,"Image2.dot","#F08080"), showList2(), ventana.update()))
 boton3_.grid(column=2, row=4)
 
 def union(lista1, lista2):
@@ -206,7 +232,6 @@ def union(lista1, lista2):
             temp_ = temp_.prev
         repo.add("Union", "Union entre: " + lista1.head.id + " + " + lista2.head.id)
     except:
-        print("Error con el union de las dos archivos")
         repo.add("ERROR", "Error con el union entre: " + lista1.head.id + " + " + lista2.head.id)
 
 def interseccion(lista1, lista2):
@@ -229,7 +254,6 @@ def interseccion(lista1, lista2):
             temp_ = temp_.prev
         repo.add("Interseccion", "Interseccion entre: " + lista1.head.id + " + " + lista2.head.id)
     except:
-        print("Error con el interseccion de las dos archivos")
         repo.add("ERROR", "Error con el interseccion entre: " + lista1.head.id + " + " + lista2.head.id)
 
 def diferencia(lista1, lista2):
@@ -248,7 +272,6 @@ def diferencia(lista1, lista2):
             temp_ = temp_.prev
         repo.add("Diferencia", "Diferencia entre: " + lista1.head.id + " + " + lista2.head.id)
     except:
-        print("Error con la diferencia de las dos archivos")
         repo.add("ERROR", "Error con la diferencia entre: " + lista1.head.id + " + " + lista2.head.id)
 
 def diferencia_S(lista1, lista2):
@@ -271,7 +294,6 @@ def diferencia_S(lista1, lista2):
             temp_ = temp_.prev
         repo.add("Diferencia Simetrica", "Diferencia Simetrica entre: " + lista1.head.id + " + " + lista2.head.id)
     except:
-        print("Error con la diferencia simetrica de las dos archivos")
         repo.add("ERROR", "Error con la diferencia simetrica entre: " + lista1.head.id + " + " + lista2.head.id)
 
 def boton_Op2(num):
@@ -282,11 +304,10 @@ def boton_Op2(num):
         elif(num==2):   interseccion(temp, temp_)
         elif(num==3):   diferencia(temp, temp_)
         elif(num==4):   diferencia_S(temp, temp_)
-        storage = temp.getList()
-        showList3(storage)
+        generar(temp, "Image3.dot","#FCFCE8")
+        showList3()
         ventana.update()
     except:
-        print("Error con la llamada al funcion")
         repo.add("ERROR","Error con la llamada al funcion")
 
 boton4_ = Button(frame2, text="Union", command = lambda: (boton_Op2(1)))

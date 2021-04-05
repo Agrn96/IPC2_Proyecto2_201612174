@@ -11,14 +11,20 @@ def cargar_Archivo(repo):
     temp = lista
     repo_ = repo
     #agregar informacion en Listas
-    k=0 # Contador para los matrizes
+    k=0
     for nombre in root:
         lleno = 0
         vacio = 0
-        temp.add_headers(root[k][0].text, root[k][1].text, root[k][2].text)
-        temp.x = root[k][1].text
-        temp.y = root[k][2].text
-        f = root[k][3].text
+        if(k!=0):
+            if(compare_name(lista,nombre[0].text)==True):
+                print("ERROR: Matriz: " + nombre[0].text + " ya existe")
+                repo.add("ERROR", "Matriz: " + nombre[0].text + " ya existe")
+                i+=1
+                continue      
+        temp.add_headers(nombre[0].text, nombre[1].text, nombre[2].text)
+        temp.x = nombre[1].text
+        temp.y = nombre[2].text
+        f = nombre[3].text
         i=-1
         j=0
         for line in f:
@@ -37,12 +43,22 @@ def cargar_Archivo(repo):
             else:
                 lleno +=1
             j+=1
-        repo_.add(root[k][0].text,"Espacios Llenos: " + str(lleno) + " Espacios Vacios: " + str(vacio))
-        k+=1
+        repo_.add(nombre[0].text,"Espacios Llenos: " + str(lleno) + " Espacios Vacios: " + str(vacio))
+        k=1
         newLista = Lista_Orthogonal()
         temp.next = newLista
         temp = temp.next
     filename.close()
     return lista
 
+def compare_name(lista, nombre):    # Funcion para verificar si no hay un matriz existente con el mismo nombre
+    temp = lista
+    print(temp.head.id, nombre)
+    if(temp.head.id == None):
+        return False
 
+    while(temp.next != None):
+        if(temp.head.id == nombre):
+            return True
+        temp = temp.next
+    return False

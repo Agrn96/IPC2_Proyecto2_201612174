@@ -70,38 +70,13 @@ class Lista_Orthogonal:
                 while(temp_.down != None):
                     temp_ = temp_.down                  # temp_ should be on a node where down is None
                 temp_.right = newNode
-                newNode.left = temp_
-    
-    def out(self):
-        temp = self.head.prev
-        while(temp != None):
-            temp_ = temp.nodeAccess
-            while(temp_ != None):
-                print(temp_.data, end=" ")
-                temp_ = temp_.right
-            print("")
-            temp = temp.prev        
+                newNode.left = temp_ 
     
     def setList(self, head, next, x, y):
         self.head = head
         self.next = next
         self.x = x
         self.y = y
-
-    def getList(self):
-        storage = ""
-        temp = self.head.prev
-        while(temp != None):
-            temp_ = temp.nodeAccess
-            while(temp_ != None):
-                if(temp_.data == "-"):
-                    storage += " \t"
-                else:
-                    storage += "*\t"
-                temp_ = temp_.right
-            storage += "\n"
-            temp = temp.prev
-        return storage
 
     def rot_H(self,repo):
         try:
@@ -129,7 +104,6 @@ class Lista_Orthogonal:
                     break
             repo.add(self.head.id, "Matriz Rotacion Horizontal")
         except:
-            print("Error encontrado con la rotacion horizontal del matriz")
             repo.add("ERROR", "Error encontrado con la rotacion horizontal del matriz")
 
     def rot_V(self,repo):
@@ -158,7 +132,6 @@ class Lista_Orthogonal:
                     break
             repo.add(self.head.id, "Matriz Rotacion Vertical")
         except:
-            print("Error encontrado con la rotacion vertical del matriz")
             repo.add("ERROR", "Error encontrado con la rotacion vertical del matriz")
 
     def transpuesta(self, repo):
@@ -172,7 +145,6 @@ class Lista_Orthogonal:
             i = int(temp.id)             # last col
             j = int(temp_.id)            # last row
             if(j!=i):
-                print("ERROR: Matriz no es eligible para una transpuesta")
                 repo.add("ERROR", "Matriz no es eligible para una transpuesta")
             else:
                 hold = ""               # Storage for swap
@@ -193,7 +165,6 @@ class Lista_Orthogonal:
                         break
             repo.add(self.head.id, "Matriz Transposado")
         except:
-            print("Error encontrado con la transpuesta del matriz")
             repo.add("ERROR", "Error encontrado con la transpuesta del matriz")
 
     def limpiar(self, x, y, x_, y_, repo):
@@ -202,14 +173,11 @@ class Lista_Orthogonal:
             tDown = abs(int(y_) - int(y)) + 1
             tRight = abs(int(x_) - int(x)) + 1
             while(int(temp.id) != int(x)-1 and int(temp.id) != int(x_)-1):
-                print(temp.id)
                 temp = temp.prev
             temp = temp.nodeAccess
             while(int(temp.col) != int(y)-1 and int(temp.col) != int(y_)-1):
-                print(temp.col)
                 temp = temp.right
             i = 0
-            print(tRight, tDown)
             while i < tRight:
                 j = 0
                 temp_ = temp
@@ -219,20 +187,17 @@ class Lista_Orthogonal:
                     j+=1
                 i+=1
                 temp = temp.right
-                repo.add(self.head.id, "Matriz Limpiado: " + x + "," + y + "," + x_ + "," + y_)
+            repo.add(self.head.id, "Matriz Limpiado: " + x + "," + y + "," + x_ + "," + y_)
         except:
-            print("Error encontrado limpiando el matriz")
             repo.add("ERROR", "Error encontrado limpiando el matriz")
 
     def agregar_H(self, x, y, size,repo):
         try:
             temp = self.head.prev   #finding row
             while(int(temp.id) != int(x)-1):
-                print(temp.id)
                 temp = temp.prev
             temp = temp.nodeAccess
             while(int(temp.col) != int(y)-1):
-                print(temp.col)
                 temp = temp.right
             i = 0
             while i < int(size):
@@ -241,18 +206,15 @@ class Lista_Orthogonal:
                 i += 1
             repo.add(self.head.id,"Agregar Linea Horizontal " + x + "," + y + "," + size)
         except:
-            print("Error encontrado agregando una linea horizontal al matriz")
             repo.add("ERROR", "Error encontrado agregando una linea horizontal al matriz")
 
     def agregar_V(self, x, y, size,repo):
         try:
             temp = self.head.prev   #finding row
             while(int(temp.id) != int(x)-1):
-                print(temp.id)
                 temp = temp.prev
             temp = temp.nodeAccess
             while(int(temp.col) != int(y)-1):
-                print(temp.col)
                 temp = temp.right
             i = 0
             while i < int(size):
@@ -261,18 +223,15 @@ class Lista_Orthogonal:
                 i+=1
             repo.add(self.head.id,"Agregar Linea Vertical " + x + "," + y + "," + size) ,
         except:
-            print("Error encontrado agregando una linea horizontal al matriz")
             repo.add("ERROR", "Error encontrado agregando una linea horizontal al matriz")
 
     def agregar_R(self,x,y,x_,y_,repo):
         try:
             temp = self.head.prev   #finding row
             while(int(temp.id) != int(x)-1):
-                print(temp.id)
                 temp = temp.prev
             temp = temp.nodeAccess
             while(int(temp.col) != int(y)-1):
-                print(temp.col)
                 temp = temp.right
             i = 1
             temp_ = temp
@@ -294,5 +253,4 @@ class Lista_Orthogonal:
                 i+=1
             repo.add(self.head.id, "Rectangulo agregado al matriz")
         except:
-            print("Error encontrado agregando una linea horizontal al matriz")
             repo.add("ERROR", "Error encontrado agregando un rectangulo al matriz")
